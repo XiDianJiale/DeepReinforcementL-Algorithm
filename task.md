@@ -22,4 +22,7 @@
 设计边缘感知注意力机制，在建筑物边缘区域增强特征表示
 ![Pasted Graphic](https://github.com/user-attachments/assets/47e98e50-4344-481a-91c5-bda7402f029f)
 
+授权码 7a01c2222f654e4b87fc96268b2dfe60
+
+
 
