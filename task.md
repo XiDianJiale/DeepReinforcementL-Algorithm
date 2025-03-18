@@ -24,5 +24,22 @@
 
 授权码 7a01c2222f654e4b87fc96268b2dfe60
 
-
+3. 相似问题与可借鉴项目
+相似领域项目：
+主动学习(Active Learning)
+Deep Bayesian Active Learning - 基于不确定性的批量采样
+相似点：同样是选择最有信息量的样本进行标注/采样
+传感器网络优化
+Sensor Placement Optimization - 基于高斯过程的传感器放置
+相似点：优化传感器位置以最大化信息覆盖
+计算机视觉中的关键点采样
+Learning to Sample - 学习点云采样策略
+相似点：通过稀疏采样重建复杂分布
+压缩感知(Compressive Sensing)
+CS-based Indoor Localization - 用于室内无线信号定位
+相似点：利用信号稀疏性实现重建
+学术论文参考：
+"Active Learning for Wireless Communications: From Signal Reconstruction to Channel Estimation" - 探讨在无线通信中应用主动学习进行信号采样
+"Efficient Radio Map Construction Based on Matrix Completion for Indoor Positioning" - 使用矩阵补全方法从稀疏测量重建RadioMap
+"DeepSense: Deep Learning for Unsupervised Sensor Selection in Mobile Sensing" - 使用深度学习选择传感器位置
 
