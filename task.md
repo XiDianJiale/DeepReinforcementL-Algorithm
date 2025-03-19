@@ -1,3 +1,170 @@
+当前使用SAC结构：
+classDiagram
+    class SACNetwork {
+        +input_dim
+        +action_dim
+        +log_std_min
+        +log_std_max
+        +feature_layer
+        +mean_layer
+        +log_std_layer
+        +q1
+        +q2
+        +forward(x)
+        +get_action(state, deterministic)
+        +evaluate(state, epsilon)
+        +get_q_values(state)
+    }
+    
+    class ModelWrapper {
+        +model
+        +device
+        +predict(building_mask, sampled_points)
+        +create_position_encoding(H, W)
+    }
+    
+    class SACRLSamplingStrategy {
+        +device
+        +model_wrapper
+        +reward_weight
+        +batch_size
+        +gamma
+        +tau
+        +target_update_interval
+        +learning_steps
+        +local_window_size
+        +action_dim
+        +policy_net
+        +target_q1
+        +target_q2
+        +replay_buffer
+        +state_encoding(building_mask, sampled_points)
+        +extract_local_state(building_mask, sampled_points, center_point)
+        +local_to_global_coords(local_coords, center_point)
+        +select_center_point(building_mask, sampled_points)
+        +sample_action(state, deterministic)
+        +state_transition(current_state, action_coords, building_mask)
+        +compute_reward(pred_map, gt_map, num_samples, current_samples)
+        +add_to_buffer(state, action, reward, next_state, done, error)
+        +sample_from_buffer(batch_size)
+        +update_priorities(indices, errors)
+        +update(batch, weights)
+        +sample(signal_map, building_mask, n_samples, current_sampled_points)
+        +train(dataset, epochs, batch_size, n_samples, n_samples_per_step, eval_interval, save_path)
+        +evaluate(dataset, n_samples, n_samples_per_step, num_eval_samples)
+        +save_model(path)
+        +load_model(path)
+    }
+    
+    class RadioMapDataset {
+    }
+    
+    class OverfitRadioMapModel {
+    }
+    
+    SACRLSamplingStrategy --> SACNetwork : 使用
+    SACRLSamplingStrategy --> ModelWrapper : 使用
+    ModelWrapper --> OverfitRadioMapModel : 包装
+    SACRLSamplingStrategy ..> RadioMapDataset : 训练和评估
+
+flowchart TD
+    subgraph 初始化
+        A[加载预训练模型] --> B[创建ModelWrapper]
+        B --> C[初始化SACRLSamplingStrategy]
+        D[加载数据集] --> C
+    end
+    
+    subgraph 训练循环
+        C --> E[选择中心点]
+        E --> F[提取局部状态]
+        F --> G[采样动作]
+        G --> H[更新采样点]
+        H --> I[预测RadioMap]
+        I --> J[计算奖励]
+        J --> K[添加到经验回放]
+        K --> L[从缓冲区采样]
+        L --> M[更新网络]
+        M --> N{训练完成?}
+        N -->|否| E
+        N -->|是| O[评估策略]
+    end
+    
+    subgraph 评估和可视化
+        O --> P[在测试集上评估]
+        P --> Q[可视化采样结果]
+        Q --> R[保存模型和结果]
+    end
+
+
+flowchart LR
+    subgraph 输入
+        I1[建筑物掩码]
+        I2[真实信号图]
+    end
+    
+    subgraph 状态处理
+        S1[状态编码]
+        S2[提取局部状态]
+        S3[选择中心点]
+    end
+    
+    subgraph 动作选择
+        A1[策略网络]
+        A2[动作采样]
+        A3[坐标转换]
+    end
+    
+    subgraph 奖励计算
+        R1[预测RadioMap]
+        R2[计算MSE/PSNR]
+        R3[计算综合奖励]
+    end
+    
+    subgraph 学习更新
+        L1[经验回放]
+        L2[优先级采样]
+        L3[策略更新]
+        L4[Q网络更新]
+        L5[目标网络软更新]
+    end
+    
+    subgraph 输出
+        O1[采样点集合]
+        O2[预测RadioMap]
+        O3[评估指标]
+    end
+    
+    I1 --> S1
+    I2 --> S1
+    S1 --> S3
+    S3 --> S2
+    S2 --> A1
+    A1 --> A2
+    A2 --> A3
+    
+    I1 --> R1
+    A3 --> R1
+    I2 --> R2
+    R1 --> R2
+    R2 --> R3
+    
+    S2 --> L1
+    A2 --> L1
+    R3 --> L1
+    L1 --> L2
+    L2 --> L3
+    L2 --> L4
+    L4 --> L5
+    
+    A3 --> O1
+    R1 --> O2
+    R2 --> O3
+
+
+
+
+
+
 
 3. 相似问题与可借鉴项目
 相似领域项目：
