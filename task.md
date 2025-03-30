@@ -405,3 +405,6 @@ def comprehensive_evaluation(self, gt_map, pred_map, building_mask, sampled_poin
 这种研究不仅有理论创新，也有明确的应用场景，非常适合作为入门论文展示您的技术能力和实际问题解决能力。
 
 
+账号：ritaisma34@gmail.com
+密码：MilikTk.Premiumstock90
+
