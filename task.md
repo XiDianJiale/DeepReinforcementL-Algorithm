@@ -1,3 +1,5 @@
+![image](https://github.com/user-attachments/assets/22771231-7101-48a8-9201-a5b73a737d8f)
+
 # RadioUNet第一阶段模型优化计划
 
 ## 当前理解与方案
